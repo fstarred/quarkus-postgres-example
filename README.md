@@ -206,3 +206,14 @@ In order to run *host-app* pod as a network service and export at port 8080, run
 ```shell script
 kubectl port-forward service/host-app 8080:8080
 ```
+
+### Hot deploy
+
+It is also possible to run quarkus with remote dev mode so any update will be hot swapped and seen immediately.
+
+With application already running on container, run this:
+
+```shell script
+mvn quarkus:remove-dev
+```
+

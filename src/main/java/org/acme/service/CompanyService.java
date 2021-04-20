@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import org.acme.entity.Company;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,6 +16,9 @@ public class CompanyService {
     @Inject
     EntityManager entityManager;
 
+    @Inject
+    Logger logger;
+
     public List<Company> findAll() {
         final CriteriaQuery<Company> criteria = entityManager
                 .getCriteriaBuilder()
@@ -24,6 +28,7 @@ public class CompanyService {
     }
 
     public Company find(Integer id) {
+        logger.info("id: {}", id);
         return entityManager.find(Company.class, id);
     }
 
