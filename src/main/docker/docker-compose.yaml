@@ -1,0 +1,31 @@
+# Use postgres/example user/password credentials
+version: "3"
+
+services:
+  host-db:
+    image: postgres
+    restart: always
+    container_name: postgres-db
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/ # *.sql *.sh files under this folder are automatically executed at startup
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres 
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8081:8080
+  host-app:
+    image: yyi9505infocert.it/quarkus-postgres-example:1.0.0-SNAPSHOT
+    restart: always
+    container_name: postgres-app
+    depends_on: 
+      - host-db
+    ports: 
+      - 8080:8080
+      - 5005:5005
