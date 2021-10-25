@@ -69,15 +69,7 @@ Install and run Docker from your local machine and launch from project root:
 ./mvnw clean package -Dquarkus.container-image.build=true -DskipTests=true
 ```
 
-Once the docker image is succesfully created, you shoud see something like this: 
-
-```shell script
-docker ps
-REPOSITORY                                    TAG              IMAGE ID       CREATED          SIZE
-fstarred/quarkus-postgres-example   1.0.0-SNAPSHOT   cbdc4a233584   32 seconds ago   439MB
-```
-
-Start containers with:
+Then start containers with:
 
 ```shell script
 docker compose -f src/main/docker/docker-compose.yaml up
@@ -88,7 +80,7 @@ If everything goes well, run 'docker ps' and you should see at least the 3 conta
 ```
 adminer - a postgres dashboard)
 postgres - the db host
-<username>/quarkus-postgres-example:1.0.0-SNAPSHOT - the app who connect to postgres 
+<user>/quarkus-postgres-example:1.0.0-SNAPSHOT - the app who connect to postgres 
 ```
 
 Open your browser with the following address:
@@ -106,7 +98,12 @@ password: example
 database: postgres
 ```
 
-if successfully connected, you should see a table 'company' already created
+if successfully connected, you should see a table 'company' already created, thanks to the inits script below on **docker-compose.yaml**
+
+```shell script
+volumes:
+- ./sql:/docker-entrypoint-initdb.d/ # *.sql *.sh files under this folder are automatically executed at startup
+```
 
 You can try to insert an item through host-app quarkus web application using *curl* command:
 
@@ -192,12 +189,14 @@ host-db-846b7b5ccc-vwcd9    1/1     Running   0          5m25s
 You can launch adminer from a random free port with the command:
 
 ```shell script
-minikube service hello-minikube
+minikube service adminer
 ```
 
 It is possible to import *script.sql* file directly from dashboard
 
 **NOTE**
+
+#### Volume mount issue
 
 As the kompose version 1.22, volume mount is not supported.
 
@@ -206,6 +205,10 @@ In order to run *host-app* pod as a network service and export at port 8080, run
 ```shell script
 kubectl port-forward service/host-app 8080:8080
 ```
+
+#### Refresh image
+
+In order to refresh docker image, remove services, pod and deployments and then re-apply kubernetes config gile.
 
 ### Hot deploy
 

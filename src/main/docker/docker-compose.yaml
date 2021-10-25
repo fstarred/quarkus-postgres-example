@@ -21,7 +21,7 @@ services:
     ports:
       - 8081:8080
   host-app:
-    image: yyi9505infocert.it/quarkus-postgres-example:1.0.0-SNAPSHOT
+    image: ${USER}/quarkus-postgres-example:1.0.0-SNAPSHOT
     restart: always
     container_name: postgres-app
     depends_on: 
@@ -29,3 +29,5 @@ services:
     ports: 
       - 8080:8080
       - 5005:5005
+    environment:
+      - GREETING_MESSAGE=docker-env

@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import org.acme.entity.Company;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -19,6 +20,9 @@ public class CompanyService {
     @Inject
     Logger logger;
 
+    @ConfigProperty(name = "greeting.message")
+    String greetings;
+
     public List<Company> findAll() {
         final CriteriaQuery<Company> criteria = entityManager
                 .getCriteriaBuilder()
@@ -28,7 +32,7 @@ public class CompanyService {
     }
 
     public Company find(Integer id) {
-        logger.info("id: {}", id);
+        logger.info("id: {} - {}", id, greetings);
         return entityManager.find(Company.class, id);
     }
 
@@ -41,7 +45,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public void delete(Integer id) {
-        entityManager.remove(entityManager.getReference(Company.class, id));
+    public void delete(Company input) {
+        entityManager.remove(input);
     }
 }
